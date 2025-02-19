@@ -6,7 +6,7 @@ import SelectionSort from './components/SelectionSort'
 
 function App() {
   return (
-    <InsertionSort/>
+    <MergeSort/>
   )
 }
 

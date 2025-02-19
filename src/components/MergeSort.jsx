@@ -2,45 +2,40 @@ import { useState } from 'react';
 import generateRandomArray from '../service/GenerateRandomArray';
 
 const MergeSort = () => {
-  const [arr, setArr] = useState(generateRandomArray(6, 10));
+  const [arr, setArr] = useState(generateRandomArray(6, 100));
   const [isSorting, setIsSorting] = useState(false);
-  const [splitIndex, setSplitIndex] = useState([]);  // Indices of the array being split
-  const [mergedIndices, setMergedIndices] = useState([]);  // Indices of merged elements
+  const [splitIndices, setSplitIndices] = useState([]); // Track split points
+  const [mergedIndices, setMergedIndices] = useState([]); // Track merged elements
+  const [comparedIndices, setComparedIndices] = useState([]); // Track elements being compared
 
   const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
-  // Merge Sort function (recursively splits the array)
-  const mergeSort = async (array, level = 0) => {
+  const mergeSort = async (array, startIdx = 0) => {
     if (array.length <= 1) return array;
 
     const middle = Math.floor(array.length / 2);
     const left = array.slice(0, middle);
     const right = array.slice(middle);
 
-    // Visualize the split step
-    setSplitIndex([middle]);  // Show the middle index as the split point
-    setArr([...array]);
-    await sleep(1000);  // Delay to show the split step
+    // Highlight the split point
+    setSplitIndices([...splitIndices, startIdx + middle]);
+    await sleep(1000);
 
-    // Recursively sort the left and right halves
-    const leftSorted = await mergeSort(left, level + 1);
-    const rightSorted = await mergeSort(right, level + 1);
-
-    // Merge the two sorted halves
-    return merge(leftSorted, rightSorted);
+    const leftSorted = await mergeSort(left, startIdx);
+    const rightSorted = await mergeSort(right, startIdx + middle);
+    return await merge(leftSorted, rightSorted, startIdx);
   };
 
-  // Merge function: merges two sorted arrays
-  const merge = async (left, right) => {
+  const merge = async (left, right, startIdx) => {
     let result = [];
     let leftIndex = 0;
     let rightIndex = 0;
     let newArr = [...arr];
+    let mergedStart = startIdx;
 
     while (leftIndex < left.length && rightIndex < right.length) {
-      setMergedIndices([leftIndex, rightIndex]);  // Highlight the compared elements
-      setArr([...newArr]);
-      await sleep(500);  // Delay to show comparison
+      setComparedIndices([mergedStart + leftIndex, mergedStart + left.length + rightIndex]);
+      await sleep(1000);
 
       if (left[leftIndex] < right[rightIndex]) {
         result.push(left[leftIndex]);
@@ -50,52 +45,49 @@ const MergeSort = () => {
         rightIndex++;
       }
 
-      // Update the array after each merge step
-      newArr = [...result, ...left.slice(leftIndex), ...right.slice(rightIndex)];
-      setArr(newArr);
-      await sleep(500);  // Delay to show the merging step
+      newArr.splice(startIdx, result.length, ...result);
+      setArr([...newArr]);
+      await sleep(1000);
     }
 
-    // Include remaining elements from left or right array
-    newArr = [...result, ...left.slice(leftIndex), ...right.slice(rightIndex)];
-    setArr(newArr);
-    await sleep(500);  // Final step delay for merging
-    return newArr;
+    result = [...result, ...left.slice(leftIndex), ...right.slice(rightIndex)];
+    newArr.splice(startIdx, result.length, ...result);
+    setArr([...newArr]);
+
+    setMergedIndices([...mergedIndices, ...Array.from({ length: result.length }, (_, i) => startIdx + i)]);
+    await sleep(1000);
+
+    return result;
   };
 
   const startMergeSort = async () => {
     setIsSorting(true);
-    await mergeSort(arr);  // Start merge sort process
+    await mergeSort(arr);
     setIsSorting(false);
   };
 
   const resetArray = () => {
-    setArr(generateRandomArray(6, 10));  // Reset array with new random values
-    setSplitIndex([]);
+    setArr(generateRandomArray(6, 100));
+    setSplitIndices([]);
     setMergedIndices([]);
+    setComparedIndices([]);
   };
 
   return (
-    <div className="flex flex-col items-center justify-center space-y-4">
-      {/* Visualizing the array state */}
-      <div className="flex space-x-2">
+    <div className="flex flex-col items-center justify-center space-y-6 py-8">
+      <h1 className="text-2xl font-semibold mb-4">Merge Sort Visualization</h1>
+
+      <div className="flex space-x-4">
         {arr.map((num, index) => {
-          let bgColor = 'bg-blue-500'; // Default background color for the array element
-
-          // Highlight split index in yellow
-          if (splitIndex.includes(index)) {
-            bgColor = 'bg-yellow-500'; // Yellow for split point
-          }
-
-          // Highlight merged elements in green
-          if (mergedIndices.includes(index)) {
-            bgColor = 'bg-green-500'; // Green for merged elements
-          }
+          let bgColor = 'bg-blue-500';
+          if (splitIndices.includes(index)) bgColor = 'bg-yellow-500'; // Splitting
+          if (comparedIndices.includes(index)) bgColor = 'bg-red-500'; // Comparing
+          if (mergedIndices.includes(index)) bgColor = 'bg-green-500'; // Merged
 
           return (
             <div
               key={index}
-              className={`h-20 w-20 flex items-center justify-center text-white rounded-lg ${bgColor}`}
+              className={`h-24 w-24 flex items-center justify-center text-white rounded-lg shadow-lg transition-all duration-300 ease-in-out ${bgColor}`}
             >
               {num}
             </div>
@@ -103,19 +95,24 @@ const MergeSort = () => {
         })}
       </div>
 
-      {/* Action buttons for resetting and starting sorting */}
-      <div className="space-x-4 mt-4">
+      <div className="space-x-4 mt-4 text-lg">
+        <span className="text-yellow-500">Yellow: Splitting</span>
+        <span className="text-red-500">Red: Comparing</span>
+        <span className="text-green-500">Green: Merged</span>
+      </div>
+
+      <div className="space-x-4 mt-6">
         <button
           onClick={resetArray}
           disabled={isSorting}
-          className="p-2 bg-gray-900 text-white rounded-lg disabled:bg-gray-400"
+          className="p-3 bg-gray-900 text-white rounded-lg shadow-lg disabled:bg-gray-400 transition-all duration-300 ease-in-out"
         >
           Reset Array
         </button>
         <button
           onClick={startMergeSort}
           disabled={isSorting}
-          className="p-2 bg-blue-500 text-white rounded-lg disabled:bg-gray-400"
+          className="p-3 bg-blue-500 text-white rounded-lg shadow-lg disabled:bg-gray-400 transition-all duration-300 ease-in-out"
         >
           {isSorting ? 'Sorting...' : 'Start Sorting'}
         </button>
