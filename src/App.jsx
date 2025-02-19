@@ -22,6 +22,7 @@ function App() {
 
   // Function to end the game
   const endGame = () => {
+    setSelectedSort(null)
     setIsGameActive(false);
     setRandomAlgorithm(null); // Reset the random algorithm when the game ends
     setGuess(''); // Clear the guess when game ends
