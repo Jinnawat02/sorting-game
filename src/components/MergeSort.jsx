@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import generateRandomArray from '../service/GenerateRandomArray';
 
-const MergeSort = () => {
+const MergeSort = ({ isGameActive }) => {
   const [arr, setArr] = useState(generateRandomArray(6, 100));
   const [isSorting, setIsSorting] = useState(false);
   const [splitIndices, setSplitIndices] = useState([]); // Track split points
@@ -75,7 +75,6 @@ const MergeSort = () => {
 
   return (
     <div className="flex flex-col items-center justify-center space-y-6 py-8">
-      <h1 className="text-2xl font-semibold mb-4">Merge Sort Visualization</h1>
 
       <div className="flex space-x-4">
         {arr.map((num, index) => {
@@ -95,11 +94,13 @@ const MergeSort = () => {
         })}
       </div>
 
-      <div className="space-x-4 mt-4 text-lg">
-        <span className="text-yellow-500">Yellow: Splitting</span>
-        <span className="text-red-500">Red: Comparing</span>
-        <span className="text-green-500">Green: Merged</span>
-      </div>
+      {!isGameActive && (
+        <div className="space-x-4 mt-4 text-lg">
+          <span className="text-yellow-500">Yellow: Splitting</span>
+          <span className="text-red-500">Red: Comparing</span>
+          <span className="text-green-500">Green: Merged</span>
+        </div>
+      )}
 
       <div className="space-x-4 mt-6">
         <button

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import generateRandomArray from '../service/GenerateRandomArray';
 
-const SelectionSort = () => {
+const SelectionSort = ({ isGameActive }) => {
   const [arr, setArr] = useState(generateRandomArray(6, 100));
   const [isSorting, setIsSorting] = useState(false);
   const [comparedIndex, setComparedIndex] = useState(null);
@@ -20,7 +20,7 @@ const SelectionSort = () => {
       let minIdx = i;
       setMinIndex(minIdx);
       await sleep(1000);
-      
+
       for (let j = i + 1; j < newArr.length; j++) {
         setComparedIndex(j);
         await sleep(1000);
@@ -58,7 +58,6 @@ const SelectionSort = () => {
 
   return (
     <div className="flex flex-col items-center justify-center space-y-6 py-8">
-      <h1 className="text-2xl font-semibold mb-4">Selection Sort Visualization</h1>
       <div className="flex space-x-4">
         {arr.map((num, index) => {
           let bgColor = 'bg-blue-500';
@@ -78,11 +77,13 @@ const SelectionSort = () => {
           );
         })}
       </div>
-      <div className="space-x-4 mt-4 text-lg">
-        <span className="text-yellow-500">Yellow: Comparing</span>
-        <span className="text-green-500">Green: Minimum Element</span>
-        <span className="text-gray-400">Gray: Sorted Elements</span>
-      </div>
+      {!isGameActive && (
+        <div className="space-x-4 mt-4 text-lg">
+          <span className="text-yellow-500">Yellow: Comparing</span>
+          <span className="text-green-500">Green: Minimum Element</span>
+          <span className="text-gray-400">Gray: Sorted Elements</span>
+        </div>
+      )}
       <div className="space-x-4 mt-6">
         <button
           onClick={resetArray}

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import generateRandomArray from '../service/GenerateRandomArray';
 
-const InsertionSort = () => {
+const InsertionSort = ({ isGameActive }) => {
   const [arr, setArr] = useState(generateRandomArray(6, 100));
   const [isSorting, setIsSorting] = useState(false);
   const [comparedIndices, setComparedIndices] = useState([-1, -1]);  // Store indices of compared elements
@@ -67,13 +67,11 @@ const InsertionSort = () => {
   };
 
   const resetArray = () => {
-    setArr(generateRandomArray(6, 100));  
+    setArr(generateRandomArray(6, 100));
   };
 
   return (
     <div className="flex flex-col items-center justify-center space-y-6 py-8">
-      {/* Title */}
-      <h1 className="text-2xl font-semibold mb-4">Insertion Sort Visualization</h1>
 
       {/* Visualizing the array state */}
       <div className="flex space-x-4">
@@ -104,11 +102,13 @@ const InsertionSort = () => {
       </div>
 
       {/* Labels */}
-      <div className="space-x-4 mt-4 text-lg">
-        <span className="text-yellow-500">Yellow: Comparing</span>
-        <span className="text-green-500">Green: Successful Swap</span>
-        <span className="text-red-500">Red: No Swap</span>
-      </div>
+      {!isGameActive && (
+        <div className="space-x-4 mt-4 text-lg">
+          <span className="text-yellow-500">Yellow: Comparing</span>
+          <span className="text-green-500">Green: Successful Swap</span>
+          <span className="text-red-500">Red: No Swap</span>
+        </div>
+      )}
 
       {/* Buttons */}
       <div className="space-x-4 mt-6">
