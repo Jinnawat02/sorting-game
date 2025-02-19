@@ -19,3 +19,15 @@ Follow these steps to set up the project locally:
    git clone https://github.com/Jinnawat02/sorting-game.git
    cd sorting-game
     ```
+
+2. Install dependencies:
+
+   ```bash
+    npm install
+    ```
+
+3. To start the development server, run:
+
+   ```bash
+   npm run dev
+    ```
