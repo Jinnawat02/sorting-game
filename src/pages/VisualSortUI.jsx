@@ -26,7 +26,7 @@ export default function VisualSortUI() {
         "Quick": ["#D4463F", "#be3f38", (props) => <QuickSort {...props} />],
         "Radix": ["#66BCB4", "#5ba9a2", (props) => <RadixSort {...props} />],
         "Selection": ["#0067A5", "#005c94", (props) => <SelectionSort {...props} />],
-                // "Counting": ["#66BCB4", "#5ba9a2", (props) => <CountingSort {...props}/>],
+        // "Counting": ["#66BCB4", "#5ba9a2", (props) => <CountingSort {...props}/>],
     };
 
     const handleButtonClick = (key) => {
@@ -45,7 +45,7 @@ export default function VisualSortUI() {
             setIsSorting(true); // Trigger sorting
         }
     };
-    
+
 
     return (
         <div className="min-h-screen flex flex-col items-center justify-center">
@@ -57,11 +57,15 @@ export default function VisualSortUI() {
                 {Object.entries(sortingComponents).map(([key, values]) => (
                     <button
                         key={key}
-                        className="w-30 py-3 text-white font-bold text-2xl rounded-2xl cursor-pointer"
+                        className="w-30 py-3 text-white font-bold text-2xl rounded-2xl cursor-pointer transition duration-300"
                         style={{
                             backgroundColor: activeButton === key ? values[1] : values[0],
                         }}
                         onClick={() => handleButtonClick(key)}
+                        onMouseEnter={(e) => (e.target.style.backgroundColor = values[1])}
+                        onMouseLeave={(e) =>
+                            (e.target.style.backgroundColor = activeButton === key ? values[1] : values[0])
+                        }
                     >
                         {key}
                     </button>
@@ -80,7 +84,7 @@ export default function VisualSortUI() {
             {/* Control Buttons */}
             <div className="flex space-x-15 mt-10 mb-10">
                 <button className="w-20 h-20 custom-gray rounded-full flex items-center justify-center text-2xl"
-                    onClick={resetArray} 
+                    onClick={resetArray}
                     disabled={isSorting}
                 >
                     <img src="src/assets/images/Shuffle.png" alt="icon" className="w-12 h-12" />
