@@ -1,14 +1,20 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BubbleSort from "../components/BubbleSort";
+import CountingSort from "../components/CountingSort";
 import InsertionSort from "../components/InsertionSort";
 import MergeSort from "../components/MergeSort";
+import QuickSort from "../components/QuickSort";
+import RadixSort from "../components/RadixSort";
 import SelectionSort from "../components/SelectionSort";
-import generateRandomArray from "../service/GenerateRandomArray";
+import generateRandomArray from "../services/GenerateRandomArray";
 
 export default function VisualSortUI() {
+    const length = 6;
+    const maxValue = 1000;
+
     const navigate = useNavigate();
-    const [arr, setArr] = useState(generateRandomArray(6, 100));
+    const [arr, setArr] = useState(generateRandomArray(length, maxValue));
     const [isSorting, setIsSorting] = useState(false);
     const [selectedSort, setSelectedSort] = useState(null);
     const [activeButton, setActiveButton] = useState(null);
@@ -17,9 +23,10 @@ export default function VisualSortUI() {
         "Bubble": ["#00A86B", "#009760", (props) => <BubbleSort {...props} />],
         "Insertion": ["#F4743B", "#db6835", (props) => <InsertionSort {...props} />],
         "Merge": ["#F1BD41", "#d8aa3a", (props) => <MergeSort {...props} />],
+        "Quick": ["#D4463F", "#be3f38", (props) => <QuickSort {...props} />],
+        "Radix": ["#66BCB4", "#5ba9a2", (props) => <RadixSort {...props} />],
         "Selection": ["#0067A5", "#005c94", (props) => <SelectionSort {...props} />],
-        "Temp1": ["#66BCB4", "#5ba9a2", null],
-        "Temp2": ["#D4463F", "#be3f38", null]
+                // "Counting": ["#66BCB4", "#5ba9a2", (props) => <CountingSort {...props}/>],
     };
 
     const handleButtonClick = (key) => {
@@ -28,7 +35,7 @@ export default function VisualSortUI() {
     };
 
     const resetArray = () => {
-        const newArr = generateRandomArray(6, 100);
+        const newArr = generateRandomArray(length, maxValue);
         setArr(newArr);
         setIsSorting(false);
     };
