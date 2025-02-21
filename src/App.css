@@ -38,3 +38,7 @@ body {
   cursor: pointer;
   background-color: #c3c3c3;
 }
+
+.custom-skyblue {
+  background-color: #BCCCDC;
+}
