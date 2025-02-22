@@ -127,6 +127,7 @@ export default function VisualSortUI() {
                         className={`w-20 h-20 custom-gray rounded-full flex items-center justify-center text-2xl transition transform ${!button.disabled ? 'hover:scale-110' : 'disabled:opacity-50'}`}
                         onClick={button.onClick}
                         disabled={button.disabled}
+                        title={button.alt}
                     >
                         <img src={button.imgSrc} alt={button.alt} className="w-12 h-12" />
                     </button>
