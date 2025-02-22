@@ -30,6 +30,14 @@ export default function PlayGame() {
     };
 
     const algorithmKeys = Object.keys(sortingAlgorithms);
+    const sortingComponents = {
+        "Bubble": ["#00A86B", "#009760", (props) => <BubbleSort {...props} />],
+        "Insertion": ["#F4743B", "#db6835", (props) => <InsertionSort {...props} />],
+        "Merge": ["#F1BD41", "#d8aa3a", (props) => <MergeSort {...props} />],
+        "Quick": ["#D4463F", "#be3f38", (props) => <QuickSort {...props} />],
+        "Radix": ["#66BCB4", "#5ba9a2", (props) => <RadixSort {...props} />],
+        "Selection": ["#0067A5", "#005c94", (props) => <SelectionSort {...props} />],
+    };
 
     // ฟังก์ชันสุ่มตัวเลขใหม่
     const resetArray = () => {
@@ -112,20 +120,20 @@ export default function PlayGame() {
 
             {/* ตัวเลือกให้ผู้ใช้เลือกอัลกอริธึม */}
             <div className="grid grid-cols-3 gap-4 mt-10">
-                {algorithmKeys.map((algorithm, index) => {
-                    const colors = ["bg-yellow-500", "bg-blue-500", "bg-orange-500", "bg-teal-500", "bg-red-500", "bg-green-500"];
-                    const defaultColor = colors[index % colors.length]; 
-                    return (
-                        <button
-                            key={algorithm}
-                            onClick={() => handleUserChoice(algorithm)}
-                            className={`w-60 h-20 text-white text-2xl font-bold rounded-lg shadow-md transition duration-300 
-                                ${defaultColor} hover:opacity-80`}
-                        >
-                            {algorithm}
-                        </button>
-                    );
-                })}
+                {algorithmKeys.map((algorithm) => (
+                    <button
+                        key={algorithm}
+                        onClick={() => handleUserChoice(algorithm)}
+                        className={`w-60 h-20 text-white text-2xl font-bold rounded-lg shadow-md transition duration-300 cursor-pointer `}
+                        style={{
+                            backgroundColor: sortingComponents[algorithm][0],
+                        }}
+                        onMouseEnter={(e) => (e.target.style.backgroundColor = sortingComponents[algorithm][1])}
+                        onMouseLeave={(e) => (e.target.style.backgroundColor = sortingComponents[algorithm][0])}
+                    >
+                        {algorithm}
+                    </button>
+                ))}
             </div>
         </div>
     );
