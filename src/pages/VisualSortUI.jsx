@@ -116,7 +116,7 @@ export default function VisualSortUI() {
                 {selectedSort ? (
                     selectedSort({ array: arr, setArr, isSorting, setIsSorting, isSorted, setIsSorted }) // Pass sorting props
                 ) : (
-                    <span className="text-gray-400">Select a sorting algorithm</span>
+                    <span className="text-2xl text-gray-400">Select a sorting algorithm</span>
                 )}
             </div>
 
