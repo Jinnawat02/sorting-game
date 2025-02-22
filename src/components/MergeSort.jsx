@@ -64,6 +64,7 @@ const MergeSort = ({ array, setArr, isSorting, setIsSorting, hideStatus = false 
       }
       step *= 2;
     }
+    setSortingIndices([]);
     setIsSorting(false);
     setCurrentStep("Sorting Complete");
     setIsSorted(true);
@@ -75,27 +76,25 @@ const MergeSort = ({ array, setArr, isSorting, setIsSorting, hideStatus = false 
         {array.map((num, index) => (
           <div
             key={index}
-            className={`h-40 w-40 flex items-center justify-center text-white rounded-lg shadow-lg ${sortingIndices.includes(index) ? 'bg-yellow-500' : 'custom-skyblue'}`}
+            className={`h-40 w-40 flex text-5xl items-center justify-center text-white rounded-lg shadow-lg ${
+              sortingIndices.includes(index) ? 'bg-yellow-500' : 'bg-blue-500'
+            }`}
           >
             {num}
           </div>
         ))}
       </div>
 
-      {!isSorted && !hideStatus && (
-        <div className="space-x-4 text-2xl">
-          <span className="text-yellow-500">Yellow: Comparing/Merging</span>
-          {currentStep && <span className="text-blue-500">{currentStep}</span>}
-        </div>
-      )}
-
-      {/* Show "Sorted" message when sorting is finished */}
-      {isSorted && (
-        <div className="space-x-4 mt-4 text-2xl">
+      <div className="space-x-4 text-2xl">
+        {isSorting ? (
+          <>
+            <span className="text-yellow-500">Yellow: Comparing/Merging</span>
+            {currentStep && <span className="text-blue-500">{currentStep}</span>}
+          </>
+        ) : (
           <span className="text-green-500">Sorted</span>
-        </div>
-      )}
-
+        )}
+      </div>
     </div>
   );
 };
