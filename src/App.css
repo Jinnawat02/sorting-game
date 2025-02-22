@@ -39,6 +39,11 @@ body {
   background-color: #c3c3c3;
 }
 
+.custom-gray:disabled {
+  cursor: not-allowed;
+  background-color: #c3c3c3;
+}
+
 .custom-skyblue {
   background-color: #BCCCDC;
 }

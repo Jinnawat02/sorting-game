@@ -1,10 +1,9 @@
 import { useState, useEffect } from 'react';
 
-const BubbleSort = ({ array, setArr, isSorting, setIsSorting, hideStatus = false }) => {
+const BubbleSort = ({ array, setArr, isSorting, setIsSorting, isSorted, setIsSorted, hideStatus = false }) => {
     const [arr, setLocalArr] = useState(array);
     const [comparedIndices, setComparedIndices] = useState([-1, -1]);
     const [swapResult, setSwapResult] = useState(null);
-    const [isSorted, setIsSorted] = useState(false);
 
     const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 

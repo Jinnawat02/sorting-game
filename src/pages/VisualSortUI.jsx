@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BubbleSort from "../components/BubbleSort";
 import CountingSort from "../components/CountingSort";
@@ -16,6 +16,7 @@ export default function VisualSortUI() {
     const navigate = useNavigate();
     const [arr, setArr] = useState(generateRandomArray(length, maxValue));
     const [isSorting, setIsSorting] = useState(false);
+    const [isSorted, setIsSorted] = useState(false);
     const [selectedSort, setSelectedSort] = useState(null);
     const [activeButton, setActiveButton] = useState(null);
 
@@ -38,6 +39,7 @@ export default function VisualSortUI() {
         const newArr = generateRandomArray(length, maxValue);
         setArr(newArr);
         setIsSorting(false);
+        setIsSorted(false);
     };
 
     const sortArray = () => {
@@ -46,6 +48,30 @@ export default function VisualSortUI() {
         }
     };
 
+    useEffect(() => {
+        console.log(isSorted);
+    }, [isSorted])
+
+    const buttons = [
+        {
+            onClick: resetArray,
+            imgSrc: "src/assets/images/Shuffle.png",
+            alt: "Shuffle",
+            disabled: isSorting,
+        },
+        {
+            onClick: sortArray,
+            imgSrc: "src/assets/images/SortingArrows.png",
+            alt: "Sort",
+            disabled: isSorting || isSorted,
+        },
+        {
+            onClick: () => navigate("/"),
+            imgSrc: "src/assets/images/HomePage.png",
+            alt: "Home",
+            disabled: false,
+        },
+    ];
 
     return (
         <div className="min-h-screen flex flex-col items-center justify-center">
@@ -57,15 +83,28 @@ export default function VisualSortUI() {
                 {Object.entries(sortingComponents).map(([key, values]) => (
                     <button
                         key={key}
-                        className="w-30 py-3 text-white font-bold text-2xl rounded-2xl cursor-pointer transition duration-300"
+                        className={`w-30 py-3 text-white font-bold text-2xl rounded-2xl cursor-pointer duration-300 transition transform ${!isSorting && "hover:scale-110"} disabled:cursor-not-allowed`}
                         style={{
-                            backgroundColor: activeButton === key ? values[1] : values[0],
+                            backgroundColor: isSorting
+                                ? activeButton === key
+                                    ? values[1] // Active button color during sorting
+                                    : "#c3c3c3" // Disabled color for non-active buttons
+                                : activeButton === key
+                                    ? values[1] // Active button color when sorting is off
+                                    : values[0], // Default color when not active
                         }}
                         onClick={() => handleButtonClick(key)}
-                        onMouseEnter={(e) => (e.target.style.backgroundColor = values[1])}
-                        onMouseLeave={(e) =>
-                            (e.target.style.backgroundColor = activeButton === key ? values[1] : values[0])
-                        }
+                        onMouseEnter={(e) => {
+                            if (!isSorting) {
+                                e.target.style.backgroundColor = values[1];
+                            }
+                        }}
+                        onMouseLeave={(e) => {
+                            if (!isSorting) {
+                                e.target.style.backgroundColor = activeButton === key ? values[1] : values[0];
+                            }
+                        }}
+                        disabled={isSorting}
                     >
                         {key}
                     </button>
@@ -75,28 +114,23 @@ export default function VisualSortUI() {
             {/* Sorting Visualization */}
             <div className="mt-10 w-300 h-100 border-2 border-gray-300 flex justify-center items-center rounded-xl">
                 {selectedSort ? (
-                    selectedSort({ array: arr, setArr, isSorting, setIsSorting }) // Pass sorting props
+                    selectedSort({ array: arr, setArr, isSorting, setIsSorting, isSorted, setIsSorted }) // Pass sorting props
                 ) : (
                     <span className="text-gray-400">Select a sorting algorithm</span>
                 )}
             </div>
 
-            {/* Control Buttons */}
             <div className="flex space-x-15 mt-10 mb-10">
-                <button className="w-20 h-20 custom-gray rounded-full flex items-center justify-center text-2xl"
-                    onClick={resetArray}
-                    disabled={isSorting}
-                >
-                    <img src="src/assets/images/Shuffle.png" alt="icon" className="w-12 h-12" />
-                </button>
-                <button className="w-20 h-20 custom-gray rounded-full flex items-center justify-center text-2xl"
-                    onClick={sortArray}>
-                    <img src="src/assets/images/SortingArrows.png" alt="icon" className="w-12 h-12" />
-                </button>
-                <button className="w-20 h-20 custom-gray rounded-full flex items-center justify-center text-2xl"
-                    onClick={() => navigate("/")}>
-                    <img src="src/assets/images/HomePage.png" alt="icon" className="w-12 h-12" />
-                </button>
+                {buttons.map((button, index) => (
+                    <button
+                        key={index}
+                        className={`w-20 h-20 custom-gray rounded-full flex items-center justify-center text-2xl transition transform ${!button.disabled ? 'hover:scale-110' : 'disabled:opacity-50'}`}
+                        onClick={button.onClick}
+                        disabled={button.disabled}
+                    >
+                        <img src={button.imgSrc} alt={button.alt} className="w-12 h-12" />
+                    </button>
+                ))}
             </div>
         </div>
     );

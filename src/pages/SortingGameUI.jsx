@@ -36,14 +36,14 @@ export default function SortingGameUI() {
             {/* Buttons */}
             <div className="space-y-6">
                 <button
-                    className="w-100 py-3 custom-yellow text-white font-bold text-5xl"
+                    className="w-100 py-3 custom-yellow text-white font-bold text-5xl transition transform hover:scale-110"
                     onClick={handleVisualizationClick}
                 >
                     VISUALIZATION
                 </button>
                 <br />
                 <button 
-                className="w-100 py-3 custom-red text-white font-bold text-5xl"
+                className="w-100 py-3 custom-red text-white font-bold text-5xl transition transform hover:scale-110"
                 onClick={handlePlayGameClick}
                 >
                     SORTING GAME

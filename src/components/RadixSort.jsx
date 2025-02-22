@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
 
-const RadixSort = ({ array, setArr, isSorting, setIsSorting, hideStatus = false }) => {
+const RadixSort = ({ array, setArr, isSorting, setIsSorting, isSorted, setIsSorted, hideStatus = false }) => {
   const [currentDigit, setCurrentDigit] = useState(null); // Track the current digit being sorted
   const [sortingIndices, setSortingIndices] = useState([]); // Track the indices being sorted
   const [prevArr, setPrevArr] = useState([...array]); // Store the previous array for visualization
-  const [isSorted, setIsSorted] = useState(false);
 
   const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms)); // Sleep for visualization delay
 
@@ -77,7 +76,7 @@ const RadixSort = ({ array, setArr, isSorting, setIsSorting, hideStatus = false 
     <div className="flex flex-col items-center justify-center space-y-6 py-8">
       {/* Display previous array only while sorting */}
       {isSorting && (
-        <div className="flex space-x-4 mb-4">
+        <div className="flex space-x-4">
           {prevArr.map((num, index) => (
             <div
               key={`prev-${index}`}
@@ -90,7 +89,7 @@ const RadixSort = ({ array, setArr, isSorting, setIsSorting, hideStatus = false 
       )}
 
       {/* Display current array */}
-      <div className="flex space-x-4 mb-4">
+      <div className="flex space-x-4">
         {array.map((num, index) => {
           let bgColor = "custom-skyblue"; // Default background color
 

@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
 
-const InsertionSort = ({ array, setArr, isSorting, setIsSorting, hideStatus = false }) => {
+const InsertionSort = ({ array, setArr, isSorting, setIsSorting, isSorted, setIsSorted, hideStatus = false }) => {
   const [comparedIndices, setComparedIndices] = useState([-1, -1]);
   const [swappingIndices, setSwappingIndices] = useState([-1, -1]);
   const [noSwapIndices, setNoSwapIndices] = useState([-1, -1]);
-  const [isSorted, setIsSorted] = useState(false);
 
   const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 

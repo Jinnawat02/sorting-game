@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
 
-const MergeSort = ({ array, setArr, isSorting, setIsSorting, hideStatus = false }) => {
+const MergeSort = ({ array, setArr, isSorting, setIsSorting, isSorted, setIsSorted, hideStatus = false }) => {
   const [sortingIndices, setSortingIndices] = useState([]);
   const [currentStep, setCurrentStep] = useState("");
   const [prevArr, setPrevArr] = useState([...array]);
-  const [isSorted, setIsSorted] = useState(false);
 
   const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -72,7 +71,7 @@ const MergeSort = ({ array, setArr, isSorting, setIsSorting, hideStatus = false 
 
   return (
     <div className="flex flex-col items-center space-y-6 py-8">
-      <div className="flex space-x-4 mb-4">
+      <div className="flex space-x-4">
         {array.map((num, index) => (
           <div
             key={index}

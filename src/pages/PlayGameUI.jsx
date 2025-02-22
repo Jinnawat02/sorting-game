@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import BubbleSort from "../components/BubbleSort";
@@ -9,7 +9,6 @@ import RadixSort from "../components/RadixSort";
 import SelectionSort from "../components/SelectionSort";
 import generateRandomArray from "../services/GenerateRandomArray";
 
-
 export default function PlayGame() {
     const length = 6;
     const maxValue = 1000;
@@ -17,19 +16,9 @@ export default function PlayGame() {
     const navigate = useNavigate();
     const [arr, setArr] = useState(generateRandomArray(length, maxValue));
     const [isSorting, setIsSorting] = useState(false);
+    const [isSorted, setIsSorted] = useState(false);
     const [selectedAlgorithm, setSelectedAlgorithm] = useState("");
-    const [showVisualization, setShowVisualization] = useState(false);
 
-    const sortingAlgorithms = {
-        "Bubble": (props) => <BubbleSort {...props} />,
-        "Insertion": (props) => <InsertionSort {...props} />,
-        "Merge": (props) => <MergeSort {...props} />,
-        "Quick": (props) => <QuickSort {...props} />,
-        "Radix": (props) => <RadixSort {...props} />,
-        "Selection": (props) => <SelectionSort {...props} />,
-    };
-
-    const algorithmKeys = Object.keys(sortingAlgorithms);
     const sortingComponents = {
         "Bubble": ["#00A86B", "#009760", (props) => <BubbleSort {...props} />],
         "Insertion": ["#F4743B", "#db6835", (props) => <InsertionSort {...props} />],
@@ -39,97 +28,107 @@ export default function PlayGame() {
         "Selection": ["#0067A5", "#005c94", (props) => <SelectionSort {...props} />],
     };
 
-    // ฟังก์ชันสุ่มตัวเลขใหม่
+    const algorithmKeys = Object.keys(sortingComponents);
+
+    useEffect(() => {
+        setSelectedAlgorithm(algorithmKeys[Math.floor(Math.random() * algorithmKeys.length)]);
+    }, []);
+
     const resetArray = () => {
         setArr(generateRandomArray(length, maxValue));
         setIsSorting(false);
+        setIsSorted(false);
         setSelectedAlgorithm("");
-        setShowVisualization(false);
+        setSelectedAlgorithm(algorithmKeys[Math.floor(Math.random() * algorithmKeys.length)]);
     };
 
-    // ฟังก์ชันสุ่ม Algorithm และแสดง Visualization (กล่องตัวเลขหายไปทันที)
-    const randomSort = () => {
-        if (isSorting) return;
-
-        setShowVisualization(true); // ซ่อนกล่องตัวเลขก่อนเริ่ม Sorting
-        setTimeout(() => {
-            setIsSorting(true);
-            const randomAlgorithm = algorithmKeys[Math.floor(Math.random() * algorithmKeys.length)];
-            setSelectedAlgorithm(randomAlgorithm); // เก็บชื่ออัลกอริธึมที่เลือก
-        }, 200);
+    const startSorting = () => {
+        if (isSorting || !selectedAlgorithm) return;
+        setIsSorting(true);
+        setIsSorted(false);
     };
 
     const handleUserChoice = (algorithm) => {
-        if (!selectedAlgorithm) return; // ถ้ายังไม่เลือก Algorithm ให้ return
-        if (algorithm === selectedAlgorithm) {
-            Swal.fire({
-                text: `You chose ${algorithm} and it's correct!`,
-                icon: "success",
-                confirmButtonColor: "#4CAF50",
-            });
-        } else {
-            Swal.fire({
-                text: `You chose ${algorithm}, but the correct answer is ${selectedAlgorithm}.`,
-                icon: "error",
-                confirmButtonColor: "#d33",
-            });
-        }
+        if (!selectedAlgorithm) return;
+        Swal.fire({
+            text: `You chose ${algorithm}, ${algorithm === selectedAlgorithm ? "and it's correct!" : "but the correct answer is " + selectedAlgorithm + "."}`,
+            icon: algorithm === selectedAlgorithm ? "success" : "error",
+            confirmButtonColor: algorithm === selectedAlgorithm ? "#4CAF50" : "#d33",
+        });
     };
 
+    const buttons = [
+        {
+            onClick: resetArray,
+            imgSrc: "src/assets/images/Shuffle.png",
+            alt: "Shuffle",
+            disabled: isSorting,
+        },
+        {
+            onClick: startSorting,
+            imgSrc: "src/assets/images/SortingArrows.png",
+            alt: "Sort",
+            disabled: isSorting || isSorted,
+        },
+        {
+            onClick: () => navigate("/"),
+            imgSrc: "src/assets/images/HomePage.png",
+            alt: "Home",
+            disabled: false,
+        },
+    ];
+
     return (
-        <div className="custom-bg min-h-screen flex flex-col items-center justify-center bg-gray-100 relative">
+        <div className="min-h-screen flex flex-col items-center justify-center">
             <div className="absolute top-5 right-5 flex space-x-4">
-                <button onClick={resetArray} disabled={isSorting} className="w-20 h-20 bg-gray-200 rounded-full flex items-center justify-center shadow-md">
-                    <img src="src/assets/images/Shuffle.png" alt="Shuffle" className="w-12 h-12" />
-                </button>
-                <button onClick={randomSort} disabled={isSorting} className="w-20 h-20 bg-gray-200 rounded-full flex items-center justify-center shadow-md">
-                    <img src="src/assets/images/SortingArrows.png" alt="Sort" className="w-12 h-12" />
-                </button>
-                <button onClick={() => navigate("/")} className="w-20 h-20 bg-gray-200 rounded-full flex items-center justify-center shadow-md">
-                    <img src="src/assets/images/HomePage.png" alt="Home" className="w-12 h-12" />
-                </button>
+                {buttons.map((button, index) => (
+                    <button
+                        key={index}
+                        className={`w-20 h-20 custom-gray rounded-full flex items-center justify-center text-2xl transition transform ${!button.disabled ? 'hover:scale-110' : 'disabled:opacity-50'}`}
+                        onClick={button.onClick}
+                        disabled={button.disabled}
+                    >
+                        <img src={button.imgSrc} alt={button.alt} className="w-12 h-12" />
+                    </button>
+                ))}
             </div>
 
-            <h1 className="text-5xl font-bold text-gray-800 mt-10">
-                SORTING GAME
-            </h1>
+            <h1 className="text-5xl font-bold text-gray-600 mt-10">SORTING GAME</h1>
 
-            {/* แสดงตัวเลข 6 ตัวก่อนเริ่ม Sorting*/}
-            {!showVisualization && (
-                <>
-                    <div className="mt-10  flex justify-center items-center rounded-xl gap-4">
-                        {arr.map((value, index) => (
-                            <div key={index} className="h-36 w-36 flex text-5xl items-center justify-center text-white rounded-lg shadow-lg transition-all duration-300 ease-in-out bg-gray-300">
-                                {value}
-                            </div>
-                        ))}
+            <div className="mt-10 w-300 h-80 border-2 border-gray-300 flex justify-center items-center rounded-xl">
+                {selectedAlgorithm && (
+                    <div className="flex flex-col items-center">
+                        {sortingComponents[selectedAlgorithm][2]({
+                            array: arr,
+                            setArr,
+                            isSorting,
+                            setIsSorting,
+                            isSorted,
+                            setIsSorted,
+                            hideStatus: true,
+                        })}
                     </div>
-                    <h1 className="text-2xl font-bold text-gray-800 mt-5">
-                        Unsorted
-                    </h1>
-                </>
-            )}
+                )}
+            </div>
 
-            {/* แสดง Visualization เมื่อกดปุ่ม Sort*/}
-            {showVisualization && (
-                <div className="mt-10  flex justify-center items-center rounded-xl">
-                    {selectedAlgorithm && sortingAlgorithms[selectedAlgorithm]({ array: arr, setArr, isSorting, setIsSorting, hideStatus: true })}
-                </div>
-
-            )}
-
-            {/* ตัวเลือกให้ผู้ใช้เลือกอัลกอริธึม */}
-            <div className="grid grid-cols-3 gap-4 mt-10">
+            <div className="grid grid-cols-3 gap-2 mt-10">
                 {algorithmKeys.map((algorithm) => (
                     <button
                         key={algorithm}
                         onClick={() => handleUserChoice(algorithm)}
-                        className={`w-60 h-20 text-white text-2xl font-bold rounded-lg shadow-md transition duration-300 cursor-pointer `}
-                        style={{
-                            backgroundColor: sortingComponents[algorithm][0],
+                        className={`w-60 h-20 text-white text-2xl font-bold rounded-lg shadow-md duration-300 cursor-pointer transform ${isSorted ? "hover:scale-105" : ""} disabled:cursor-not-allowed`}
+                        style={{ backgroundColor: sortingComponents[algorithm][0] }}
+                        onMouseEnter={(e) => {
+                            if (isSorted) {
+                                e.target.style.backgroundColor = sortingComponents[algorithm][1];
+                            }
                         }}
-                        onMouseEnter={(e) => (e.target.style.backgroundColor = sortingComponents[algorithm][1])}
-                        onMouseLeave={(e) => (e.target.style.backgroundColor = sortingComponents[algorithm][0])}
+                        onMouseLeave={(e) => {
+                            if (isSorted) {
+                                e.target.style.backgroundColor = sortingComponents[algorithm][0];
+                            }
+                        }}
+                        disabled={isSorting || !isSorted}
                     >
                         {algorithm}
                     </button>

@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
 
-const SelectionSort = ({ array, setArr, isSorting, setIsSorting, hideStatus = false }) => {
+const SelectionSort = ({ array, setArr, isSorting, setIsSorting, isSorted, setIsSorted, hideStatus = false }) => {
   const [comparedIndex, setComparedIndex] = useState(null);
   const [minIndex, setMinIndex] = useState(null);
   const [sortedUpTo, setSortedUpTo] = useState(-1);
   const [isFinished, setIsFinished] = useState(false);
-  const [isSorted, setIsSorted] = useState(false);
 
   const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
