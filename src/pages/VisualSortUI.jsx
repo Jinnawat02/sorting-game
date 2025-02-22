@@ -57,13 +57,13 @@ export default function VisualSortUI() {
             onClick: resetArray,
             imgSrc: "src/assets/images/Shuffle.png",
             alt: "Shuffle",
-            disabled: isSorting,
+            disabled: isSorting || !selectedSort,
         },
         {
             onClick: sortArray,
             imgSrc: "src/assets/images/SortingArrows.png",
             alt: "Sort",
-            disabled: isSorting || isSorted,
+            disabled: isSorting || isSorted || !selectedSort,
         },
         {
             onClick: () => navigate("/"),

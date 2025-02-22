@@ -17,7 +17,7 @@ export default function PlayGame() {
     const [arr, setArr] = useState(generateRandomArray(length, maxValue));
     const [isSorting, setIsSorting] = useState(false);
     const [isSorted, setIsSorted] = useState(false);
-    const [selectedAlgorithm, setSelectedAlgorithm] = useState("");
+    const [selectedAlgorithm, setSelectedAlgorithm] = useState(null);
 
     const sortingComponents = {
         "Bubble": ["#00A86B", "#009760", (props) => <BubbleSort {...props} />],
@@ -38,7 +38,7 @@ export default function PlayGame() {
         setArr(generateRandomArray(length, maxValue));
         setIsSorting(false);
         setIsSorted(false);
-        setSelectedAlgorithm("");
+        setSelectedAlgorithm(null);
         setSelectedAlgorithm(algorithmKeys[Math.floor(Math.random() * algorithmKeys.length)]);
     };
 
