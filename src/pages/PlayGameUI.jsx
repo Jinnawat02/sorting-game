@@ -12,7 +12,7 @@ import generateRandomArray from "../services/GenerateRandomArray";
 
 export default function PlayGame() {
     const length = 6;
-    const maxValue = 100;
+    const maxValue = 1000;
 
     const navigate = useNavigate();
     const [arr, setArr] = useState(generateRandomArray(length, maxValue));
@@ -69,7 +69,7 @@ export default function PlayGame() {
     };
 
     return (
-        <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 relative">
+        <div className="custom-bg min-h-screen flex flex-col items-center justify-center bg-gray-100 relative">
             <div className="absolute top-5 right-5 flex space-x-4">
                 <button onClick={resetArray} disabled={isSorting} className="w-20 h-20 bg-gray-200 rounded-full flex items-center justify-center shadow-md">
                     <img src="src/assets/images/Shuffle.png" alt="Shuffle" className="w-12 h-12" />
