@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 
-const MergeSort = ({ array, setArr, isSorting, setIsSorting }) => {
+const MergeSort = ({ array, setArr, isSorting, setIsSorting, hideStatus = false }) => {
   const [sortingIndices, setSortingIndices] = useState([]);
   const [currentStep, setCurrentStep] = useState("");
   const [prevArr, setPrevArr] = useState([...array]);
+  const [isSorted, setIsSorted] = useState(false);
 
   const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -65,6 +66,7 @@ const MergeSort = ({ array, setArr, isSorting, setIsSorting }) => {
     }
     setIsSorting(false);
     setCurrentStep("Sorting Complete");
+    setIsSorted(true);
   };
 
   return (
@@ -73,18 +75,27 @@ const MergeSort = ({ array, setArr, isSorting, setIsSorting }) => {
         {array.map((num, index) => (
           <div
             key={index}
-            className={`h-20 w-20 flex items-center justify-center text-white rounded-lg shadow-lg ${sortingIndices.includes(index) ? 'bg-yellow-500' : 'bg-blue-500'}`}
+            className={`h-40 w-40 flex items-center justify-center text-white rounded-lg shadow-lg ${sortingIndices.includes(index) ? 'bg-yellow-500' : 'custom-skyblue'}`}
           >
             {num}
           </div>
         ))}
       </div>
 
-      <div className="space-x-4 text-xl">
-        <span className="text-yellow-500">Yellow: Comparing/Merging</span>
-        {currentStep && <span className="text-blue-500">{currentStep}</span>}
-        {!isSorting && <span className="text-green-500">Sorted</span>}
-      </div>
+      {!isSorted && !hideStatus && (
+        <div className="space-x-4 text-2xl">
+          <span className="text-yellow-500">Yellow: Comparing/Merging</span>
+          {currentStep && <span className="text-blue-500">{currentStep}</span>}
+        </div>
+      )}
+
+      {/* Show "Sorted" message when sorting is finished */}
+      {isSorted && (
+        <div className="space-x-4 mt-4 text-2xl">
+          <span className="text-green-500">Sorted</span>
+        </div>
+      )}
+
     </div>
   );
 };
