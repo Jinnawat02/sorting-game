@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-const InsertionSort = ({ array, setArr, isSorting, setIsSorting }) => {
+const InsertionSort = ({ array, setArr, isSorting, setIsSorting, hideStatus = false }) => {
   const [comparedIndices, setComparedIndices] = useState([-1, -1]);
   const [swappingIndices, setSwappingIndices] = useState([-1, -1]);
   const [noSwapIndices, setNoSwapIndices] = useState([-1, -1]);
@@ -87,7 +87,7 @@ const InsertionSort = ({ array, setArr, isSorting, setIsSorting }) => {
         })}
       </div>
 
-      {!isSorted && (
+      {!isSorted && !hideStatus && (
         <div className="space-x-4 mt-4 text-2xl">
           <span className="text-yellow-500">Yellow: Comparing</span>
           <span className="text-green-500">Green: Successful Swap</span>

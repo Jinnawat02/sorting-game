@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-const RadixSort = ({ array, setArr, isSorting, setIsSorting }) => {
+const RadixSort = ({ array, setArr, isSorting, setIsSorting, hideStatus = false }) => {
   const [currentDigit, setCurrentDigit] = useState(null); // Track the current digit being sorted
   const [sortingIndices, setSortingIndices] = useState([]); // Track the indices being sorted
   const [prevArr, setPrevArr] = useState([...array]); // Store the previous array for visualization
@@ -108,7 +108,7 @@ const RadixSort = ({ array, setArr, isSorting, setIsSorting }) => {
         })}
       </div>
 
-      {!isSorted && (
+      {!isSorted && !hideStatus && (
         <div className="space-x-4 mt-4 text-2xl">
           <span className="text-yellow-500">Yellow: Sorting by Digit</span>
           {currentDigit && (

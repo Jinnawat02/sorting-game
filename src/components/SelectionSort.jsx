@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-const SelectionSort = ({ array, setArr, isSorting, setIsSorting }) => {
+const SelectionSort = ({ array, setArr, isSorting, setIsSorting, hideStatus = false }) => {
   const [comparedIndex, setComparedIndex] = useState(null);
   const [minIndex, setMinIndex] = useState(null);
   const [sortedUpTo, setSortedUpTo] = useState(-1);
@@ -77,7 +77,7 @@ const SelectionSort = ({ array, setArr, isSorting, setIsSorting }) => {
         })}
       </div>
 
-      {!isSorted && (
+      {!isSorted && !hideStatus && (
         <div className="space-x-4 mt-4 text-2xl">
           <span className="text-yellow-500">Yellow: Comparing</span>
           <span className="text-green-500">Green: Minimum Element</span>

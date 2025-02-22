@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-const BubbleSort = ({ array, setArr, isSorting, setIsSorting }) => {
+const BubbleSort = ({ array, setArr, isSorting, setIsSorting, hideStatus = false }) => {
     const [arr, setLocalArr] = useState(array);
     const [comparedIndices, setComparedIndices] = useState([-1, -1]);
     const [swapResult, setSwapResult] = useState(null);
@@ -70,14 +70,14 @@ const BubbleSort = ({ array, setArr, isSorting, setIsSorting }) => {
                 })}
             </div>
 
-            {!isSorted && (
-            <div className="space-x-4 mt-4 text-2xl">
-                <span className="text-yellow-500">Yellow: Comparing</span>
-                <span className="text-green-500">Green: Successful Swap</span>
-                <span className="text-red-500">Red: No Swap</span>
-            </div>
+            {!isSorted && !hideStatus && (
+                <div className="space-x-4 mt-4 text-2xl">
+                    <span className="text-yellow-500">Yellow: Comparing</span>
+                    <span className="text-green-500">Green: Successful Swap</span>
+                    <span className="text-red-500">Red: No Swap</span>
+                </div>
             )}
-
+            
             {/* Show "Sorted" message when sorting is finished */}
             {isSorted && (
                 <div className="space-x-4 mt-4 text-2xl">

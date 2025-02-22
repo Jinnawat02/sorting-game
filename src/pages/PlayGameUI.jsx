@@ -43,7 +43,7 @@ export default function PlayGame() {
     const resetArray = () => {
         setArr(generateRandomArray(length, maxValue));
         setIsSorting(false);
-        setSelectedAlgorithm(""); 
+        setSelectedAlgorithm("");
         setShowVisualization(false);
     };
 
@@ -97,25 +97,25 @@ export default function PlayGame() {
             {/* แสดงตัวเลข 6 ตัวก่อนเริ่ม Sorting*/}
             {!showVisualization && (
                 <>
-                <div className="mt-10  flex justify-center items-center rounded-xl gap-4">
-                    {arr.map((value, index) => (
-                        <div key={index} className="h-36 w-36 flex text-5xl items-center justify-center text-white rounded-lg shadow-lg transition-all duration-300 ease-in-out bg-gray-300">
-                            {value}
-                        </div>
-                    ))}
-                </div>
-                <h1 className="text-2xl font-bold text-gray-800 mt-5">
+                    <div className="mt-10  flex justify-center items-center rounded-xl gap-4">
+                        {arr.map((value, index) => (
+                            <div key={index} className="h-36 w-36 flex text-5xl items-center justify-center text-white rounded-lg shadow-lg transition-all duration-300 ease-in-out bg-gray-300">
+                                {value}
+                            </div>
+                        ))}
+                    </div>
+                    <h1 className="text-2xl font-bold text-gray-800 mt-5">
                         Unsorted
-                </h1>
+                    </h1>
                 </>
             )}
 
             {/* แสดง Visualization เมื่อกดปุ่ม Sort*/}
             {showVisualization && (
                 <div className="mt-10  flex justify-center items-center rounded-xl">
-                    {selectedAlgorithm && sortingAlgorithms[selectedAlgorithm]({ array: arr, setArr, isSorting, setIsSorting })}
+                    {selectedAlgorithm && sortingAlgorithms[selectedAlgorithm]({ array: arr, setArr, isSorting, setIsSorting, hideStatus: true })}
                 </div>
-                
+
             )}
 
             {/* ตัวเลือกให้ผู้ใช้เลือกอัลกอริธึม */}
