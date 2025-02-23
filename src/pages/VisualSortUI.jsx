@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BubbleSort from "../components/BubbleSort";
-import CountingSort from "../components/CountingSort";
 import InsertionSort from "../components/InsertionSort";
 import MergeSort from "../components/MergeSort";
 import QuickSort from "../components/QuickSort";
@@ -27,7 +26,6 @@ export default function VisualSortUI() {
         "Quick": ["#D4463F", "#be3f38", (props) => <QuickSort {...props} />],
         "Radix": ["#66BCB4", "#5ba9a2", (props) => <RadixSort {...props} />],
         "Selection": ["#0067A5", "#005c94", (props) => <SelectionSort {...props} />],
-        // "Counting": ["#66BCB4", "#5ba9a2", (props) => <CountingSort {...props}/>],
     };
 
     const handleButtonClick = (key) => {
@@ -47,10 +45,6 @@ export default function VisualSortUI() {
             setIsSorting(true); // Trigger sorting
         }
     };
-
-    useEffect(() => {
-        console.log(isSorted);
-    }, [isSorted])
 
     const buttons = [
         {
