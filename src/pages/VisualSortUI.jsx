@@ -11,6 +11,7 @@ import generateRandomArray from "../services/GenerateRandomArray";
 export default function VisualSortUI() {
     const length = 6;
     const maxValue = 1000;
+    const timeSleep = 1000;
 
     const navigate = useNavigate();
     const [arr, setArr] = useState(generateRandomArray(length, maxValue));
@@ -108,7 +109,7 @@ export default function VisualSortUI() {
             {/* Sorting Visualization */}
             <div className="mt-10 w-300 h-100 border-2 border-gray-300 flex justify-center items-center rounded-xl">
                 {selectedSort ? (
-                    selectedSort({ array: arr, setArr, isSorting, setIsSorting, isSorted, setIsSorted }) // Pass sorting props
+                    selectedSort({ array: arr, setArr, isSorting, setIsSorting, isSorted, setIsSorted, timeSleep }) // Pass sorting props
                 ) : (
                     <span className="text-2xl text-gray-400">Select a sorting algorithm</span>
                 )}

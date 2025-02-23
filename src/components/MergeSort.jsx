@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-const MergeSort = ({ array, setArr, isSorting, setIsSorting, isSorted, setIsSorted, hideStatus = false }) => {
+const MergeSort = ({ array, setArr, isSorting, setIsSorting, isSorted, setIsSorted, timeSleep, hideStatus = false }) => {
   const [sortingIndices, setSortingIndices] = useState([]);
   const [currentStep, setCurrentStep] = useState("");
   const [prevArr, setPrevArr] = useState([...array]);
@@ -25,21 +25,21 @@ const MergeSort = ({ array, setArr, isSorting, setIsSorting, isSorted, setIsSort
       } else {
         merged.push(right[j++]);
       }
-      await sleep(1000);
+      await sleep(timeSleep);
     }
 
     while (i < left.length) {
       setSortingIndices([startIdx + i]);
       setCurrentStep(`Adding ${left[i]}`);
       merged.push(left[i++]);
-      await sleep(1000);
+      await sleep(timeSleep);
     }
 
     while (j < right.length) {
       setSortingIndices([startIdx + left.length + j]);
       setCurrentStep(`Adding ${right[j]}`);
       merged.push(right[j++]);
-      await sleep(1000);
+      await sleep(timeSleep);
     }
 
     for (let k = 0; k < merged.length; k++) {
@@ -47,7 +47,7 @@ const MergeSort = ({ array, setArr, isSorting, setIsSorting, isSorted, setIsSort
     }
     setArr([...arr]);
     setCurrentStep("Swap Complete");
-    await sleep(1000);
+    await sleep(timeSleep);
   };
 
   const iterativeMergeSort = async (arr) => {

@@ -12,6 +12,7 @@ import generateRandomArray from "../services/GenerateRandomArray";
 export default function PlayGame() {
     const length = 6;
     const maxValue = 1000;
+    const timeSleep = 1000;
 
     const navigate = useNavigate();
     const [arr, setArr] = useState(generateRandomArray(length, maxValue));
@@ -106,6 +107,7 @@ export default function PlayGame() {
                             setIsSorting,
                             isSorted,
                             setIsSorted,
+                            timeSleep,
                             hideStatus: true,
                         })}
                     </div>

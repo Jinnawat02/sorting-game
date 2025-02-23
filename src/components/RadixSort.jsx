@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-const RadixSort = ({ array, setArr, isSorting, setIsSorting, isSorted, setIsSorted, hideStatus = false }) => {
+const RadixSort = ({ array, setArr, isSorting, setIsSorting, isSorted, setIsSorted, timeSleep, hideStatus = false }) => {
   const [currentDigit, setCurrentDigit] = useState(null); // Track the current digit being sorted
   const [sortingIndices, setSortingIndices] = useState([]); // Track the indices being sorted
   const [prevArr, setPrevArr] = useState([...array]); // Store the previous array for visualization
@@ -30,7 +30,7 @@ const RadixSort = ({ array, setArr, isSorting, setIsSorting, isSorted, setIsSort
       let digit = Math.floor(arr[i] / exp) % 10; // Get the digit at the current place
       count[digit]++; // Increment count for this digit
       setSortingIndices([i]); // Show the current element being processed
-      await sleep(1000); // Wait 1 second for visualization
+      await sleep(timeSleep); // Wait 1 second for visualization
     }
 
     setSortingIndices([]);
@@ -45,7 +45,7 @@ const RadixSort = ({ array, setArr, isSorting, setIsSorting, isSorted, setIsSort
       output[count[digit] - 1] = arr[i]; // Place element in the correct position
       count[digit]--; // Decrease the count for this digit
       setArr([...output]); // Update the array visualization
-      await sleep(1000); // Wait 1 second for visualization
+      await sleep(timeSleep); // Wait 1 second for visualization
     }
 
     setSortingIndices([]); // Reset sorting indices

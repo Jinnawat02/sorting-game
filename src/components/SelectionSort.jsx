@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-const SelectionSort = ({ array, setArr, isSorting, setIsSorting, isSorted, setIsSorted, hideStatus = false }) => {
+const SelectionSort = ({ array, setArr, isSorting, setIsSorting, isSorted, setIsSorted, timeSleep, hideStatus = false }) => {
   const [comparedIndex, setComparedIndex] = useState(null);
   const [minIndex, setMinIndex] = useState(null);
   const [sortedUpTo, setSortedUpTo] = useState(-1);
@@ -21,16 +21,16 @@ const SelectionSort = ({ array, setArr, isSorting, setIsSorting, isSorted, setIs
     for (let i = 0; i < newArr.length - 1; i++) {
       let minIdx = i;
       setMinIndex(minIdx);
-      await sleep(1000);
+      await sleep(timeSleep);
 
       for (let j = i + 1; j < newArr.length; j++) {
         setComparedIndex(j);
-        await sleep(1000);
+        await sleep(timeSleep);
 
         if (newArr[j] < newArr[minIdx]) {
           minIdx = j;
           setMinIndex(minIdx);
-          await sleep(1000);
+          await sleep(timeSleep);
         }
       }
 
@@ -42,7 +42,7 @@ const SelectionSort = ({ array, setArr, isSorting, setIsSorting, isSorted, setIs
       setSortedUpTo(i);
       setComparedIndex(null);
       setMinIndex(null);
-      await sleep(1000);
+      await sleep(timeSleep);
     }
 
     setSortedUpTo(newArr.length - 1);

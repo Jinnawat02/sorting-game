@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-const InsertionSort = ({ array, setArr, isSorting, setIsSorting, isSorted, setIsSorted, hideStatus = false }) => {
+const InsertionSort = ({ array, setArr, isSorting, setIsSorting, isSorted, setIsSorted, timeSleep, hideStatus = false }) => {
   const [comparedIndices, setComparedIndices] = useState([-1, -1]);
   const [swappingIndices, setSwappingIndices] = useState([-1, -1]);
   const [noSwapIndices, setNoSwapIndices] = useState([-1, -1]);
@@ -23,7 +23,7 @@ const InsertionSort = ({ array, setArr, isSorting, setIsSorting, isSorted, setIs
       let swapped = false;
 
       setComparedIndices([i, j]);
-      await sleep(1000);
+      await sleep(timeSleep);
 
       let firstTime = true;
       while (j >= 0 && newArr[j] > key) {
@@ -33,14 +33,14 @@ const InsertionSort = ({ array, setArr, isSorting, setIsSorting, isSorted, setIs
 
         if (!firstTime) {
           setComparedIndices([j, j + 1]);
-          await sleep(1000);
+          await sleep(timeSleep);
         } else {
           firstTime = false;
         }
 
         setSwappingIndices([j, j + 1]);
         setArr([...newArr]);
-        await sleep(1000);
+        await sleep(timeSleep);
 
         setSwappingIndices([-1, -1]);
         setComparedIndices([-1, -1]);
@@ -50,14 +50,14 @@ const InsertionSort = ({ array, setArr, isSorting, setIsSorting, isSorted, setIs
 
       if (!swapped) {
         setNoSwapIndices([i, j]);
-        await sleep(1000);
+        await sleep(timeSleep);
         setNoSwapIndices([-1, -1]);
       }
 
       newArr[j + 1] = key;
       setArr([...newArr]);
 
-      await sleep(1000);
+      await sleep(timeSleep);
       setComparedIndices([-1, -1]);
     }
 

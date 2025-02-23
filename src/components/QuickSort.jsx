@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-const QuickSort = ({ array, setArr, isSorting, setIsSorting, isSorted, setIsSorted, hideStatus = false }) => {
+const QuickSort = ({ array, setArr, isSorting, setIsSorting, isSorted, setIsSorted, timeSleep, hideStatus = false }) => {
   const [arr, setLocalArr] = useState(array);
   const [comparedIndices, setComparedIndices] = useState([-1, -1]);
   const [swapResult, setSwapResult] = useState(null);
@@ -44,13 +44,13 @@ const QuickSort = ({ array, setArr, isSorting, setIsSorting, isSorted, setIsSort
     for (let j = low; j < high; j++) {
       setComparedIndices([j, high]); // Highlight the current element and pivot
       setSwapResult(null); // Reset swap result while comparing
-      await sleep(1000); // Pause for visual effect
+      await sleep(timeSleep); // Pause for visual effect
 
       if (arr[j] < pivot) {
         i++;
         
         setComparedIndices([i, j]);
-        await sleep(1000);
+        await sleep(timeSleep);
 
         [arr[i], arr[j]] = [arr[j], arr[i]]; // Swap elements
 
@@ -62,7 +62,7 @@ const QuickSort = ({ array, setArr, isSorting, setIsSorting, isSorted, setIsSort
         
         setLocalArr([...arr]);
         setArr([...arr]); // Update parent array
-        await sleep(1000);
+        await sleep(timeSleep);
       } else {
         setSwapResult('fail');
       }
@@ -73,17 +73,17 @@ const QuickSort = ({ array, setArr, isSorting, setIsSorting, isSorted, setIsSort
     [arr[i + 1], arr[high]] = [arr[high], arr[i + 1]];
     setSwapResult(null);
     setComparedIndices([null, i + 1]);
-    await sleep(1000);
+    await sleep(timeSleep);
 
     setSwapResult('success');
     setLocalArr([...arr]);
     setArr([...arr]); // Update parent array
-    await sleep(1000);
+    await sleep(timeSleep);
 
     setSwapResult(null);
     setPivotIndex(i + 1); // Update pivot position
     setComparedIndices([null, pivotIndex])
-    await sleep(1000);
+    await sleep(timeSleep);
 
     return i + 1;
   };
