@@ -13,12 +13,16 @@ export default function PlayGame() {
     const length = 6;
     const maxValue = 1000;
     const timeSleep = 1000;
+    const countdownTime = 5000;
 
     const navigate = useNavigate();
     const [arr, setArr] = useState(generateRandomArray(length, maxValue));
     const [isSorting, setIsSorting] = useState(false);
     const [isSorted, setIsSorted] = useState(false);
     const [selectedAlgorithm, setSelectedAlgorithm] = useState(null);
+    const [countdown, setCountdown] = useState(null);
+    const [totalScore, setTotalScore] = useState(0);
+    const [isCorrectAnswer, setIsCorrectAnswer] = useState(false);
 
     const sortingComponents = {
         "Bubble": ["#00A86B", "#009760", (props) => <BubbleSort {...props} />],
@@ -35,11 +39,41 @@ export default function PlayGame() {
         setSelectedAlgorithm(algorithmKeys[Math.floor(Math.random() * algorithmKeys.length)]);
     }, []);
 
+    useEffect(() => {
+        if (isSorted && !isCorrectAnswer) {
+            setCountdown(countdownTime);
+            const timer = setInterval(() => {
+                setCountdown((prev) => {
+                    if (prev <= 10) { // Close to 0
+                        clearInterval(timer);
+                        Swal.fire({
+                            title: "Game Over!",
+                            text: "Time ran out! You didn't choose in time.",
+                            icon: "error",
+                            confirmButtonColor: "#d33",
+                            allowOutsideClick: false,
+                        }).then(() => {
+                            resetArray();
+                            setTotalScore(0);
+                        });
+                        return 0;
+                    }
+                    return prev - 10; // Decrease by 10ms
+                });
+            }, 10); // Update every 10ms for smooth countdown
+
+            return () => clearInterval(timer);
+        }
+    }, [isSorted, isCorrectAnswer]);
+
     const resetArray = () => {
         setArr(generateRandomArray(length, maxValue));
         setIsSorting(false);
         setIsSorted(false);
         setSelectedAlgorithm(null);
+        setCountdown(null);
+        setIsCorrectAnswer(false);
+        setTotalScore(0);
         setSelectedAlgorithm(algorithmKeys[Math.floor(Math.random() * algorithmKeys.length)]);
     };
 
@@ -51,11 +85,30 @@ export default function PlayGame() {
 
     const handleUserChoice = (algorithm) => {
         if (!selectedAlgorithm) return;
-        Swal.fire({
-            text: `You chose ${algorithm}, ${algorithm === selectedAlgorithm ? "and it's correct!" : "but the correct answer is " + selectedAlgorithm + "."}`,
-            icon: algorithm === selectedAlgorithm ? "success" : "error",
-            confirmButtonColor: algorithm === selectedAlgorithm ? "#4CAF50" : "#d33",
-        });
+
+        const timeBonus = Math.floor((countdown / countdownTime) * 1000); // Scale bonus to max 1000 points
+        if (algorithm === selectedAlgorithm) {
+            setIsCorrectAnswer(true); // Stop countdown
+            setTotalScore(totalScore + timeBonus);
+
+            Swal.fire({
+                text: `You chose ${algorithm}, and it's correct! You earned ${timeBonus} points.`,
+                icon: "success",
+                confirmButtonColor: "#4CAF50",
+            }).then(() => {
+                resetArray();
+            });
+        } else {
+            Swal.fire({
+                title: "Game Over!",
+                text: `You chose ${algorithm}, but the correct answer is ${selectedAlgorithm}. Final score: ${totalScore}`,
+                icon: "error",
+                confirmButtonColor: "#d33",
+                allowOutsideClick: false,
+            }).then(() => {
+                resetArray();
+            });
+        }
     };
 
     const buttons = [
@@ -81,23 +134,29 @@ export default function PlayGame() {
 
     return (
         <div className="min-h-screen flex flex-col items-center justify-center">
-            <div className="absolute top-5 right-5 flex space-x-4">
-                {buttons.map((button, index) => (
-                    <button
-                        key={index}
-                        className={`w-20 h-20 custom-gray rounded-full flex items-center justify-center text-2xl transition transform ${!button.disabled ? 'hover:scale-110' : 'disabled:opacity-50'}`}
-                        onClick={button.onClick}
-                        disabled={button.disabled}
-                        title={button.alt}
-                    >
-                        <img src={button.imgSrc} alt={button.alt} className="w-12 h-12" />
-                    </button>
-                ))}
+            <div className="absolute top-5 left-5 right-5 flex justify-between items-center">
+                <div className="text-gray-600 text-5xl">
+                    Total score: {totalScore}
+                </div>
+
+                <div className="flex space-x-4">
+                    {buttons.map((button, index) => (
+                        <button
+                            key={index}
+                            className={`w-20 h-20 custom-gray rounded-full flex items-center justify-center text-2xl transition transform ${!button.disabled ? 'hover:scale-110' : 'disabled:opacity-50'}`}
+                            onClick={button.onClick}
+                            disabled={button.disabled}
+                            title={button.alt}
+                        >
+                            <img src={button.imgSrc} alt={button.alt} className="w-12 h-12" />
+                        </button>
+                    ))}
+                </div>
             </div>
 
-            <h1 className="text-5xl font-bold text-gray-600 mt-10">SORTING GAME</h1>
+            <h1 className="text-5xl font-bold text-gray-600 mt-25">SORTING GAME</h1>
 
-            <div className="mt-10 w-300 h-80 border-2 border-gray-300 flex justify-center items-center rounded-xl">
+            <div className="mt-10 h-100 w-300 h-80 border-2 border-gray-300 flex flex-col justify-center items-center rounded-xl">
                 {selectedAlgorithm && (
                     <div className="flex flex-col items-center">
                         {sortingComponents[selectedAlgorithm][2]({
@@ -112,9 +171,15 @@ export default function PlayGame() {
                         })}
                     </div>
                 )}
+
+                {isSorted && (
+                    <h2 className="text-3xl font-bold text-red-500">
+                        Time Left: {(countdown / 1000).toFixed(2)}s
+                    </h2>
+                )}
             </div>
 
-            <div className="grid grid-cols-3 gap-2 mt-10">
+            <div className="grid grid-cols-3 gap-2 mt-10 mb-10">
                 {algorithmKeys.map((algorithm) => (
                     <button
                         key={algorithm}
