@@ -4,72 +4,72 @@ const MergeSort = ({ array, setArr, isSorting, setIsSorting, isSorted, setIsSort
   const [sortingIndices, setSortingIndices] = useState([]);
   const [currentStep, setCurrentStep] = useState("");
   const [subArrays, setSubArrays] = useState({ left: [], right: [] });
+  const [focusIndices, setFocusIndices] = useState([]);
 
   const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
   useEffect(() => {
     if (isSorting) {
-      iterativeMergeSort([...array]);
+      recursiveMergeSort([...array], 0, array.length - 1);
     }
   }, [isSorting]);
 
-  const merge = async (arr, left, right, startIdx) => {
-    let merged = [];
-    let i = 0, j = 0;
+  const recursiveMergeSort = async (arr, left, right) => {
+    if (left < right) {
+      let mid = Math.floor((left + right) / 2);
+      await recursiveMergeSort(arr, left, mid);
+      await recursiveMergeSort(arr, mid + 1, right);
+      await merge(arr, left, mid, right);
+    }
+    if (left === 0 && right === arr.length - 1) {
+      setSortingIndices([]);
+      setIsSorting(false);
+      setCurrentStep("Sorting Complete");
+      setIsSorted(true);
+    }
+  };
+
+  const merge = async (arr, leftStart, leftEnd, rightEnd) => {
+    let left = arr.slice(leftStart, leftEnd + 1);
+    let right = arr.slice(leftEnd + 1, rightEnd + 1);
+    let i = 0, j = 0, k = leftStart;
 
     setSubArrays({ left, right });
     await sleep(timeSleep);
 
     while (i < left.length && j < right.length) {
-      setSortingIndices([startIdx + i, startIdx + left.length + j]);
+      setSortingIndices([k]);
+      setFocusIndices([...Array(left.length).keys()].map(x => leftStart + x).concat([...Array(right.length).keys()].map(x => leftEnd + 1 + x)));
       setCurrentStep(`Comparing ${left[i]} and ${right[j]}`);
-      if (left[i] < right[j]) {
-        merged.push(left[i++]);
+      if (left[i] <= right[j]) {
+        arr[k++] = left[i++];
       } else {
-        merged.push(right[j++]);
+        arr[k++] = right[j++];
       }
       await sleep(timeSleep);
     }
 
     while (i < left.length) {
-      setSortingIndices([startIdx + i]);
+      setSortingIndices([k]);
+      setFocusIndices([...Array(left.length).keys()].map(x => leftStart + x));
       setCurrentStep(`Adding ${left[i]}`);
-      merged.push(left[i++]);
+      arr[k++] = left[i++];
       await sleep(timeSleep);
     }
 
     while (j < right.length) {
-      setSortingIndices([startIdx + left.length + j]);
+      setSortingIndices([k]);
+      setFocusIndices([...Array(right.length).keys()].map(x => leftEnd + 1 + x));
       setCurrentStep(`Adding ${right[j]}`);
-      merged.push(right[j++]);
+      arr[k++] = right[j++];
       await sleep(timeSleep);
     }
 
-    for (let k = 0; k < merged.length; k++) {
-      arr[startIdx + k] = merged[k];
-    }
     setArr([...arr]);
-    setCurrentStep("Merge Complete");
     setSubArrays({ left: [], right: [] });
+    setFocusIndices([]);
+    setCurrentStep("Merge Complete");
     await sleep(timeSleep);
-  };
-
-  const iterativeMergeSort = async (arr) => {
-    let n = arr.length;
-    let step = 1;
-
-    while (step < n) {
-      for (let i = 0; i < n; i += 2 * step) {
-        const left = arr.slice(i, i + step);
-        const right = arr.slice(i + step, i + 2 * step);
-        await merge(arr, left, right, i);
-      }
-      step *= 2;
-    }
-    setSortingIndices([]);
-    setIsSorting(false);
-    setCurrentStep("Sorting Complete");
-    setIsSorted(true);
   };
 
   return (
@@ -78,7 +78,9 @@ const MergeSort = ({ array, setArr, isSorting, setIsSorting, isSorted, setIsSort
         {array.map((num, index) => (
           <div
             key={index}
-            className={`h-40 w-40 flex text-5xl items-center justify-center text-white rounded-lg shadow-lg ${sortingIndices.includes(index) ? 'bg-yellow-500' : 'custom-skyblue'}`}
+            className={`h-40 w-40 flex text-5xl items-center justify-center text-white rounded-lg shadow-lg ${
+              sortingIndices.includes(index) ? 'bg-yellow-500' : focusIndices.includes(index) ? 'bg-blue-500' : 'custom-skyblue'
+            }`}
           >
             {num}
           </div>
@@ -88,7 +90,8 @@ const MergeSort = ({ array, setArr, isSorting, setIsSorting, isSorted, setIsSort
       {!isSorted && !hideStatus && (
         <div className="space-x-4 mt-4 text-2xl">
           <span className="text-yellow-500">Yellow: Comparing/Merging</span>
-          {currentStep && <span className="text-blue-500">{currentStep}</span>}
+          <span className="text-blue-500">Blue: Current Subarrays Being Merged</span>
+          {currentStep && <span className="text-red-500">{currentStep}</span>}
         </div>
       )}
 
