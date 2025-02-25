@@ -4,6 +4,7 @@ const RadixSort = ({ array, setArr, isSorting, setIsSorting, isSorted, setIsSort
   const [currentDigit, setCurrentDigit] = useState(null); // Track the current digit being sorted
   const [sortingIndices, setSortingIndices] = useState([]); // Track the indices being sorted
   const [prevArr, setPrevArr] = useState([...array]); // Store the previous array for visualization
+  const [visualPrevArr, setVisualPrevArr] = useState(false);
 
   const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms)); // Sleep for visualization delay
 
@@ -12,6 +13,12 @@ const RadixSort = ({ array, setArr, isSorting, setIsSorting, isSorted, setIsSort
       radixSort(); // Start sorting when `isSorting` is true
     }
   }, [isSorting]);
+
+  useEffect(() =>{
+    if (isSorted) {
+      setCurrentDigit(null);
+    }
+  }, [isSorted]);
 
   // Find the maximum number in the array to determine the number of digits
   const getMax = (arr) => {
@@ -29,10 +36,11 @@ const RadixSort = ({ array, setArr, isSorting, setIsSorting, isSorted, setIsSort
     for (let i = 0; i < n; i++) {
       let digit = Math.floor(arr[i] / exp) % 10; // Get the digit at the current place
       count[digit]++; // Increment count for this digit
-      setSortingIndices([i]); // Show the current element being processed
+      setSortingIndices([i]); // Show the current element being processed      
       await sleep(timeSleep); // Wait 1 second for visualization
     }
 
+    setVisualPrevArr(true);
     setSortingIndices([]);
     // Step 2: Update the count array to store actual positions of digits
     for (let i = 1; i < 10; i++) {
@@ -44,10 +52,13 @@ const RadixSort = ({ array, setArr, isSorting, setIsSorting, isSorted, setIsSort
       let digit = Math.floor(arr[i] / exp) % 10; // Get the digit at the current place
       output[count[digit] - 1] = arr[i]; // Place element in the correct position
       count[digit]--; // Decrease the count for this digit
+      
       setArr([...output]); // Update the array visualization
+      setPrevArr((prev) => [...prev.slice(0, -1)]);
       await sleep(timeSleep); // Wait 1 second for visualization
     }
 
+    setVisualPrevArr(false);
     setSortingIndices([]); // Reset sorting indices
     return output; // Return the sorted array based on the current digit
   };
@@ -75,7 +86,7 @@ const RadixSort = ({ array, setArr, isSorting, setIsSorting, isSorted, setIsSort
   return (
     <div className="flex flex-col items-center justify-center space-y-6 py-8">
       {/* Display previous array only while sorting */}
-      {isSorting && (
+      {isSorting && visualPrevArr && !hideStatus && (
         <div className="flex space-x-4">
           {prevArr.map((num, index) => (
             <div
@@ -121,10 +132,10 @@ const RadixSort = ({ array, setArr, isSorting, setIsSorting, isSorted, setIsSort
       {/* Show "Sorted" message when sorting is finished */}
       {isSorted && (
         <div className="space-x-4 mt-4 text-2xl">
-          <span className="text-green-500">Sorted </span>
+          <span className="text-green-500">Sorted</span>
         </div>
       )}
-      
+
     </div>
   );
 };

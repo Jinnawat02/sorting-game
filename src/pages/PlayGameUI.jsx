@@ -73,7 +73,6 @@ export default function PlayGame() {
         setSelectedAlgorithm(null);
         setCountdown(null);
         setIsCorrectAnswer(false);
-        setTotalScore(0);
         setSelectedAlgorithm(algorithmKeys[Math.floor(Math.random() * algorithmKeys.length)]);
     };
 
@@ -107,6 +106,7 @@ export default function PlayGame() {
                 allowOutsideClick: false,
             }).then(() => {
                 resetArray();
+                setTotalScore(0);
             });
         }
     };
