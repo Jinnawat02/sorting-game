@@ -97,7 +97,7 @@ const InsertionSort = ({ array, setArr, isSorting, setIsSorting, isSorted, setIs
       {/* Show "Sorted" message when sorting is finished */}
       {isSorted && (
         <div className="space-x-4 mt-4 text-2xl">
-          <span className="text-green-500">Sorted </span>
+          <span className="text-green-500">Sorted</span>
         </div>
       )}
 
