@@ -59,7 +59,7 @@ const SelectionSort = ({ array, setArr, isSorting, setIsSorting, isSorted, setIs
 
           if (comparedIndex === index) bgColor = "bg-yellow-500"; // Comparing
           if (minIndex === index) bgColor = "bg-green-500"; // Minimum Element
-          if (index <= sortedUpTo) bgColor = "bg-gray-500"; // Sorted Elements
+          if (index <= sortedUpTo) bgColor = "bg-gray-400"; // Sorted Elements
 
           if (isFinished) {
             bgColor = "custom-skyblue";

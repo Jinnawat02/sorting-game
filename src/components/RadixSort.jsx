@@ -91,7 +91,7 @@ const RadixSort = ({ array, setArr, isSorting, setIsSorting, isSorted, setIsSort
           {prevArr.map((num, index) => (
             <div
               key={`prev-${index}`}
-              className={`h-20 w-20 flex text-2xl items-center justify-center text-white rounded-lg shadow-lg transition-all duration-300 ease-in-out bg-gray-500`}
+              className={`h-20 w-20 flex text-2xl items-center justify-center text-white rounded-lg shadow-lg transition-all duration-300 ease-in-out bg-gray-400`}
             >
               {num}
             </div>

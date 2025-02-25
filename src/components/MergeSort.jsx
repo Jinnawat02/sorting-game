@@ -103,14 +103,14 @@ const MergeSort = ({
         <div className="flex space-x-8">
           {/* Left Subarray */}
           <div className="flex flex-col items-center">
-            <div className="text-xl text-gray-500 font-semibold mb-1">Left Subarray</div>
+            <div className="text-xl text-gray-400 font-semibold mb-1">Left Subarray</div>
             <div className="flex space-x-4">
               {subArrays.left.map((num, index) => {
                 const isHighlighted = focusIndices.includes(index);
                 return (
                   <div
                     key={`left-${index}`}
-                    className={`h-20 w-20 flex text-2xl items-center justify-center text-white rounded-lg shadow-lg transition-all duration-300 ease-in-out ${isHighlighted ? "bg-yellow-500" : "bg-gray-500"}`}
+                    className={`h-20 w-20 flex text-2xl items-center justify-center text-white rounded-lg shadow-lg transition-all duration-300 ease-in-out ${isHighlighted ? "bg-yellow-500" : "bg-gray-400"}`}
                   >
                     {num}
                   </div>
@@ -121,14 +121,14 @@ const MergeSort = ({
 
           {/* Right Subarray */}
           <div className="flex flex-col items-center">
-            <div className="text-xl text-gray-500 font-semibold mb-1">Right Subarray</div>
+            <div className="text-xl text-gray-400 font-semibold mb-1">Right Subarray</div>
             <div className="flex space-x-4">
               {subArrays.right.map((num, index) => {
                 const isHighlighted = focusIndices.includes(index);
                 return (
                   <div
                     key={`right-${index}`}
-                    className={`h-20 w-20 flex text-2xl items-center justify-center text-white rounded-lg shadow-lg transition-all duration-300 ease-in-out ${isHighlighted ? "bg-yellow-500" : "bg-gray-500"}`}
+                    className={`h-20 w-20 flex text-2xl items-center justify-center text-white rounded-lg shadow-lg transition-all duration-300 ease-in-out ${isHighlighted ? "bg-yellow-500" : "bg-gray-400"}`}
                   >
                     {num}
                   </div>
@@ -165,7 +165,7 @@ const MergeSort = ({
         <div className="flex space-x-6 mt-4 text-2xl">
           <span className="text-green-500">Green: Added</span>
           <span className="text-yellow-500">Yellow: Comparing</span>
-          <span className="text-gray-500">Gray: Merging</span>
+          <span className="text-gray-400">Gray: Merging</span>
         </div>
       )}
 
