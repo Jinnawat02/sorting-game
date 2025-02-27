@@ -48,7 +48,7 @@ export default function PlayGame() {
                         clearInterval(timer);
                         Swal.fire({
                             title: "Game Over!",
-                            text: "Time ran out! You didn't choose in time.",
+                            text: `Time ran out! Your total score is ${totalScore}.`,
                             icon: "error",
                             confirmButtonColor: "#d33",
                             allowOutsideClick: false,
