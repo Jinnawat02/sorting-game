@@ -99,7 +99,7 @@ const MergeSort = ({
 
   return (
     <div className="flex flex-col items-center space-y-6 py-8">
-      {isSorting && !hideStatus && (subArrays.left.length > 0 || subArrays.right.length > 0) && (
+      {isSorting  && (subArrays.left.length > 0 || subArrays.right.length > 0) && (
         <div className="flex space-x-8">
           {/* Left Subarray */}
           <div className="flex flex-col items-center">

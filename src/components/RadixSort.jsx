@@ -86,7 +86,7 @@ const RadixSort = ({ array, setArr, isSorting, setIsSorting, isSorted, setIsSort
   return (
     <div className="flex flex-col items-center justify-center space-y-6 py-8">
       {/* Display previous array only while sorting */}
-      {isSorting && visualPrevArr && !hideStatus && (
+      {isSorting && visualPrevArr && (
         <div className="flex space-x-4">
           {prevArr.map((num, index) => (
             <div
